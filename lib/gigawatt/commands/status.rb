@@ -63,12 +63,12 @@ options:
       def print_status
         str  = "#{@project["name"]}"
 
-        running_total = @project["running_total"]
-        running_total += (Time.now.to_i - @project["started_at"]) if @project["running"]
-        overdue = running_total > @project["time_limit"]
+        grand_total = @project["grand_total"]
+        grand_total += (Time.now.to_i - @project["started_at"]) if @project["running"]
+        overdue = grand_total > @project["time_limit"] if @project["time_limit"]
 
-        str += " [#{to_clock_s(running_total, true)}]" unless overdue
-        str += " [#{HighLine::String.new(to_clock_s(running_total, true)).red}]" if overdue
+        str += " [#{to_clock_s(grand_total, true)}]" unless overdue
+        str += " [#{HighLine::String.new(to_clock_s(grand_total, true)).red}]" if overdue
 
         str += " #{HighLine::String.new("Running").green}" if @project["running"]
 

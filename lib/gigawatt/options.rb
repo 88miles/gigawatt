@@ -1,6 +1,6 @@
 module Gigawatt
   class Options
-    SUB_COMMANDS = %w(setup init start stop sync status)
+    SUB_COMMANDS = %w(setup init start stop sync status log)
 
     def self.parse!
       version_string = File.read(File.join(File.dirname(__FILE__), '..', '..', 'VERSION')).strip
@@ -15,11 +15,13 @@ Usage:
   88miles [globaloptions] <subcommand> [options]
 
 subcommands:
-  setup: Link your 88 Miles account to this program
-  init:  Link a project to a directory
-  start: Punch in to the linked project
-  stop:  Punch out of the linked project
-  sync:  Refresh the local cache from the server
+  setup:  Link your 88 Miles account to this program
+  init:   Link a project to a directory
+  start:  Punch in to the linked project
+  stop:   Punch out of the linked project
+  sync:   Refresh the local cache from the server
+  status: Show the project timer
+  log:    Print out the project shifts
 
 globaloptions:
         EOS
@@ -41,6 +43,8 @@ globaloptions:
         Gigawatt::Commands::Sync.run!(settings)
       when "status"
         Gigawatt::Commands::Status.run!(settings)
+      when "log"
+        Gigawatt::Commands::Log.run!(settings)
       else
         Trollop::die "Unknown subcommand #{cmd.inspect}"
       end

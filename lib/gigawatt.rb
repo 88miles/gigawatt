@@ -18,6 +18,7 @@ require File.join(File.dirname(__FILE__), 'gigawatt', 'commands', 'start')
 require File.join(File.dirname(__FILE__), 'gigawatt', 'commands', 'stop')
 require File.join(File.dirname(__FILE__), 'gigawatt', 'commands', 'sync')
 require File.join(File.dirname(__FILE__), 'gigawatt', 'commands', 'status')
+require File.join(File.dirname(__FILE__), 'gigawatt', 'commands', 'log')
 
 module Gigawatt
 end
