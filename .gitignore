@@ -1,3 +1,5 @@
+*.swp
+.88miles
 # rcov generated
 coverage
 coverage.data
