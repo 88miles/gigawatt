@@ -61,7 +61,8 @@ options:
       end
 
       def print_status
-        str  = "#{@project["name"]}"
+        company = @cache.companies(true)[@project["company_uuid"]]
+        str  = "#{company["name"]}: #{@project["name"]}"
 
         grand_total = @project["grand_total"]
         grand_total += (Time.now.to_i - @project["started_at"]) if @project["running"]

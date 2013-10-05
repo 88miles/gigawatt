@@ -25,6 +25,7 @@ Usage:
         @options = options
 
         @access_key = OAuth.token(@settings.access_key)
+        @cache = Cache.new(settings, @access_key)
         @project = Gigawatt::ProjectFile.new.project
       end
 
@@ -38,7 +39,9 @@ Usage:
 
         buffer = ''
         shifts = JSON.parse(@access_key.get("/api/1/projects/#{@project["uuid"]}/shifts.json").body)
-        buffer += "#{@project["name"]} shifts:\n\n"
+
+        company = @cache.companies(true)[@project["company_uuid"]]
+        buffer += "#{company["name"]}: #{@project["name"]} shifts:\n\n"
 
         total = 0
         shifts["response"].each do |shift|
