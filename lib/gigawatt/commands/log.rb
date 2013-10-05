@@ -43,38 +43,48 @@ options
         shifts = JSON.parse(@access_key.get("/api/1/projects/#{@project["uuid"]}/shifts.json").body)
 
         company = @cache.companies(true)[@project["company_uuid"]]
+        staff = @cache.staff(true)
         buffer += "#{company["name"]}: #{@project["name"]} shifts:\n\n"
 
         total = 0
+        rows = []
         shifts["response"].each do |shift|
+          row = []
+
+          staff_member = staff[shift["user_uuid"]]
           start = Time.parse(shift["start"])
           stop = Time.parse(shift["stop"] || Time.now.to_s)
           total += (stop - start)
 
-          str = "#{start.strftime("%d/%M/%Y %H:%M:%S")}"
-          str += " - #{stop.strftime("%H:%M:%S")}\t"
-          str += "[#{to_clock_s(stop - start)}]\t"
+          if staff_member
+            row << "#{staff_member["first_name"]} #{staff_member["last_name"]}"
+          else
+            row << "[Deleted user]"
+          end
+          row << "#{start.strftime("%d/%M/%Y %H:%M:%S")} - #{stop.strftime("%H:%M:%S")}"
+          row << "#{to_clock_s(stop - start)}"
 
           if shift["notes"].to_s == ""
-            str += " No notes"
+            row << " No notes"
           else
-            str += " #{shift["notes"]}"
+            row << " #{shift["notes"]}"
           end
 
           if shift["stop"].nil?
-            str = HighLine::String.new(str).green
+            row = row.map{ |col| HighLine::String.new(col).green }
           end
-
-
-          buffer += str + "\n"
+          rows << row
         end
+
+        rows << :separator
         overdue = @project["grand_total"] > @project["time_limit"] if @project["time_limit"]
         if overdue
-          buffer += "Total:                          #{HighLine::String.new("[#{to_clock_s(total)}]").red}\n"
+          rows << [ 'Total', '', HighLine::String.new(to_clock_s(total)).red, '' ]
         else
-          buffer += "Total:                          [#{to_clock_s(total)}]\n"
+          rows << [ 'Total', '', to_clock_s(total), '' ]
         end
-        say(buffer)
+
+        say(Terminal::Table.new(:rows => rows).to_s)
         return 0
       end
 

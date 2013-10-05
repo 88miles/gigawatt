@@ -15,11 +15,18 @@ module Gigawatt
       projects["response"]
     end
 
+    def fetch_staff
+      staff = JSON.parse(@access_key.get("/api/1/staff.json").body)
+      staff["response"]
+    end
+
     def refresh!
       @settings.companies = nil
       @settings.projects = nil
+      @settings.staff = nil
       companies
       projects
+      staff
     end
 
     def companies(indexed = false)
@@ -46,6 +53,19 @@ module Gigawatt
         projects[p["uuid"]] = p
       end
       projects
+    end
+
+    def staff(indexed = false)
+      if @settings.staff.nil?
+        @settings.staff = fetch_staff
+        @settings.write(:staff)
+      end
+      return @settings.staff unless indexed
+      staff = {}
+      @settings.staff.each do |s|
+        staff[s["uuid"]] = s
+      end
+      staff
     end
   end
 end

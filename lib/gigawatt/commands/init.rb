@@ -33,12 +33,12 @@ module Gigawatt
         choose do |menu|
           menu.prompt = "Pick a project"
           @cache.projects.each do |project|
-            menu.choice("#{companies[project["uuid"]]}: #{project["name"]}") { selected = project }
+            menu.choice("#{companies[project["company_uuid"]]["name"]}: #{project["name"]}") { selected = project }
           end
         end
 
         ProjectFile.write(selected)
-        say("Project selected. Run  <%= color('88miles start', BOLD) %> to punch in")
+        say("<%= color('#{companies[selected["company_uuid"]]["name"]}: #{selected["name"]}', GREEN) %> selected. Run <%= color('88miles start', BOLD) %> to punch in")
       end
     end
   end

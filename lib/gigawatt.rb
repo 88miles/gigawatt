@@ -3,8 +3,8 @@ require 'highline/import'
 require 'oauth2'
 require 'fileutils'
 require 'json'
-require 'hashie/mash'
 require 'open-uri'
+require 'terminal-table'
 
 require File.join(File.dirname(__FILE__), 'gigawatt', 'cache')
 require File.join(File.dirname(__FILE__), 'gigawatt', 'settings')

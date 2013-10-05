@@ -18,6 +18,7 @@ options:
 
           opt :sync, "Sync the data from the server first. Uses the cache if false", :type => :flag
           opt :foreground, "Don't exit - just refresh the timer", :type => :flag
+          opt :time, "Only return the time", :type => :flag
         end
 
         instance = self.new(settings, options)
@@ -62,18 +63,25 @@ options:
 
       def print_status
         company = @cache.companies(true)[@project["company_uuid"]]
-        str  = "#{company["name"]}: #{@project["name"]}"
 
         grand_total = @project["grand_total"]
         grand_total += (Time.now.to_i - @project["started_at"]) if @project["running"]
         overdue = grand_total > @project["time_limit"] if @project["time_limit"]
 
-        str += " [#{to_clock_s(grand_total, true)}]" unless overdue
-        str += " [#{HighLine::String.new(to_clock_s(grand_total, true)).red}]" if overdue
+        clock_string = to_clock_s(grand_total, true)
+        clock_string = " [#{HighLine::String.new(clock_string).red}]" if overdue
 
-        str += " #{HighLine::String.new("Running").green}" if @project["running"]
+        str = ""
+        if @options[:time]
+           str = clock_string
+        else
+          str += "#{company["name"]}: #{@project["name"]}"
+          str += " [#{clock_string}]"
+          str += " #{HighLine::String.new("Running").green}" if @project["running"]
+        end
 
-        print "\e[0K\r#{str}"
+        print "\e[0K\r#{str}" if @options[:foreground]
+        print str unless @options[:foreground]
       end
 
       def to_clock_s(time, show_seconds = false)
