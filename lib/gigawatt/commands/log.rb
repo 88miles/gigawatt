@@ -11,7 +11,9 @@ module Gigawatt
 Print out the shifts for the linked project
 
 Usage:
-  88miles log
+  88miles log [options]
+
+options
           EOS
           opt :page, "Page the output", :type => :flag, :default => true
         end
