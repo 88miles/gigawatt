@@ -61,7 +61,7 @@ options
           else
             row << "[Deleted user]"
           end
-          row << "#{start.strftime("%d/%M/%Y %H:%M:%S")} - #{stop.strftime("%H:%M:%S")}"
+          row << "#{start.getlocal.strftime("%d/%M/%Y %H:%M:%S")} - #{stop.getlocal.strftime("%H:%M:%S")}"
           row << "#{to_clock_s(stop - start)}"
 
           if shift["notes"].to_s == ""
