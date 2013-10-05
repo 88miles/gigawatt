@@ -16,6 +16,7 @@ Usage:
 options
           EOS
           opt :page, "Page the output", :type => :flag, :default => true
+          opt :table, "Outputs a formatted table", :type => :flag, :default => false
         end
 
         instance = self.new(settings, options)
@@ -39,6 +40,62 @@ options
 
         $terminal.page_at = :auto if @options[:page]
 
+        if @options[:table]
+          log_table
+        else
+          log_blob
+        end
+        return 0
+      end
+
+      def log_blob
+        buffer = ''
+        shifts = JSON.parse(@access_key.get("/api/1/projects/#{@project["uuid"]}/shifts.json").body)
+
+        company = @cache.companies(true)[@project["company_uuid"]]
+        staff = @cache.staff(true)
+        buffer += "#{company["name"]}: #{@project["name"]} shifts:\n\n"
+
+        total = 0
+        rows = []
+        str = ""
+        shifts["response"].each do |shift|
+          staff_member = staff[shift["user_uuid"]]
+          start = Time.parse(shift["start"])
+          stop = Time.parse(shift["stop"] || Time.now.to_s)
+          total += (stop - start)
+
+          str += "<%= color('uuid #{shift["uuid"]}', YELLOW) %>\n"
+
+          if staff_member
+            str += "Staff:  #{staff_member["first_name"]} #{staff_member["last_name"]} <#{staff_member["email_address"]}>\n"
+          else
+            str += "Staff:  [Deleted user]\n"
+          end
+
+          str += "Start:  #{start.getlocal.strftime('%c %:z')}\n"
+          str += "Stop:   #{stop.getlocal.strftime('%c %:z')}\n"
+          str += "Total:  #{to_clock_s(stop - start)}\n"
+          str += "\n\t"
+          if shift["notes"].to_s == ""
+            str += "No notes\n"
+          else
+            str += "#{shift["notes"]}\n"
+          end
+          str += "\n"
+        end
+
+        overdue = @project["grand_total"] > @project["time_limit"] if @project["time_limit"]
+        if overdue
+          str += "Total: #{HighLine::String.new(to_clock_s(total)).red}"
+        else
+          str += "Total: #{to_clock_s(total)}"
+        end
+
+        say(str)
+      end
+
+      def log_table
         buffer = ''
         shifts = JSON.parse(@access_key.get("/api/1/projects/#{@project["uuid"]}/shifts.json").body)
 
@@ -84,8 +141,7 @@ options
           rows << [ 'Total', '', to_clock_s(total), '' ]
         end
 
-        say(Terminal::Table.new(:rows => rows).to_s)
-        return 0
+        say(Terminal::Table.new(:rows => rows).to_s) if @options[:table]
       end
 
       def to_clock_s(time, show_seconds = false)
