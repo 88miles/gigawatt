@@ -45,7 +45,7 @@ Gem::Specification.new do |s|
     "test/helper.rb",
     "test/test_gigawatt.rb"
   ]
-  s.homepage = "http://github.com/madpilot/gigawatt"
+  s.homepage = "http://github.com/88miles/gigawatt"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.15"
