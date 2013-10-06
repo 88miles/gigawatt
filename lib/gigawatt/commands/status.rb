@@ -82,7 +82,7 @@ options:
 
         overdue = grand_total > @project["time_limit"] if @project["time_limit"]
         remaining = HighLine::String.new(to_clock_s(remaining)).red if overdue
-        remaining = to_clock_s(remaining) unless overdue
+        remaining = to_clock_s(remaining) unless overdue if @project["time_limit"]
 
         str = ""
         if @options[:time]
