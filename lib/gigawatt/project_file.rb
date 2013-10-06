@@ -5,7 +5,12 @@ module Gigawatt
       if File.exists?(file)
         return File.join(file)
       else
-
+        parts = dir.split(File::SEPARATOR)[0..-2]
+        if parts.length == 0
+          return nil
+        else
+          return find_the_dotfile(File.join(parts))
+        end
       end
     end
 
