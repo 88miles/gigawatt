@@ -5,25 +5,42 @@
 
 Gem::Specification.new do |s|
   s.name = "gigawatt"
-  s.version = "0.0.0"
+  s.version = "1.0.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Myles Eftos"]
-  s.date = "2013-10-05"
+  s.date = "2013-10-06"
   s.description = "Command line interface to 88 Miles"
   s.email = "myles@madpilot.com.au"
   s.executables = ["88miles"]
   s.extra_rdoc_files = [
     "LICENSE.txt",
-    "README.rdoc"
+    "README.md"
   ]
   s.files = [
     ".document",
     "Gemfile",
+    "Gemfile.lock",
     "LICENSE.txt",
-    "README.rdoc",
+    "README.md",
     "Rakefile",
+    "VERSION",
+    "bin/88miles",
+    "gigawatt.gemspec",
     "lib/gigawatt.rb",
+    "lib/gigawatt/application.rb",
+    "lib/gigawatt/cache.rb",
+    "lib/gigawatt/commands/init.rb",
+    "lib/gigawatt/commands/log.rb",
+    "lib/gigawatt/commands/setup.rb",
+    "lib/gigawatt/commands/start.rb",
+    "lib/gigawatt/commands/status.rb",
+    "lib/gigawatt/commands/stop.rb",
+    "lib/gigawatt/commands/sync.rb",
+    "lib/gigawatt/oauth.rb",
+    "lib/gigawatt/options.rb",
+    "lib/gigawatt/project_file.rb",
+    "lib/gigawatt/settings.rb",
     "test/helper.rb",
     "test/test_gigawatt.rb"
   ]
@@ -37,17 +54,32 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
+      s.add_runtime_dependency(%q<trollop>, ["~> 2.0"])
+      s.add_runtime_dependency(%q<highline>, ["~> 1.6.19"])
+      s.add_runtime_dependency(%q<oauth2>, ["~> 0.9.2i"])
+      s.add_runtime_dependency(%q<launchy>, ["~> 2.3.0"])
+      s.add_runtime_dependency(%q<terminal-table>, ["~> 1.4.5"])
       s.add_development_dependency(%q<shoulda>, [">= 0"])
       s.add_development_dependency(%q<rdoc>, ["~> 3.12"])
       s.add_development_dependency(%q<bundler>, ["~> 1.0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.8.7"])
     else
+      s.add_dependency(%q<trollop>, ["~> 2.0"])
+      s.add_dependency(%q<highline>, ["~> 1.6.19"])
+      s.add_dependency(%q<oauth2>, ["~> 0.9.2i"])
+      s.add_dependency(%q<launchy>, ["~> 2.3.0"])
+      s.add_dependency(%q<terminal-table>, ["~> 1.4.5"])
       s.add_dependency(%q<shoulda>, [">= 0"])
       s.add_dependency(%q<rdoc>, ["~> 3.12"])
       s.add_dependency(%q<bundler>, ["~> 1.0"])
       s.add_dependency(%q<jeweler>, ["~> 1.8.7"])
     end
   else
+    s.add_dependency(%q<trollop>, ["~> 2.0"])
+    s.add_dependency(%q<highline>, ["~> 1.6.19"])
+    s.add_dependency(%q<oauth2>, ["~> 0.9.2i"])
+    s.add_dependency(%q<launchy>, ["~> 2.3.0"])
+    s.add_dependency(%q<terminal-table>, ["~> 1.4.5"])
     s.add_dependency(%q<shoulda>, [">= 0"])
     s.add_dependency(%q<rdoc>, ["~> 3.12"])
     s.add_dependency(%q<bundler>, ["~> 1.0"])

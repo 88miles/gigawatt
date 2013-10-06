@@ -18,7 +18,7 @@ Jeweler::Tasks.new do |gem|
   gem.homepage = "http://github.com/madpilot/gigawatt"
   gem.license = "MIT"
   gem.summary = %Q{Command line interface to 88 Miles}
-  gem.description = %Q{Command line interface to 88 Miles}
+  gem.description = %Q{88 Miles (http://88miles.net) is simple time tracking for freelance developers, designers and copywriters. This gem allows you to access you account from your command line.}
   gem.email = "myles@madpilot.com.au"
   gem.authors = ["Myles Eftos"]
   gem.executables = [ '88miles' ]
