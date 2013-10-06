@@ -71,18 +71,28 @@ options:
 
         grand_total = @project["grand_total"]
         grand_total += (Time.now.to_i - @project["started_at"]) if @project["running"]
-        overdue = grand_total > @project["time_limit"] if @project["time_limit"]
+        remaining = @project["time_limit"] - grand_total if @project["time_limit"]
+        running_total = (Time.now.to_i - @project["started_at"]) if @project["running"]
 
-        clock_string = to_clock_s(grand_total, true)
-        clock_string = " [#{HighLine::String.new(clock_string).red}]" if overdue
+        if @project["running"]
+          spinner = HighLine::String.new([ '|', '/', '-', '\\' ][running_total % 4]).green
+          clock_string = to_clock_s(running_total, true)
+          clock_string = "[#{HighLine::String.new(to_clock_s(running_total, true)).green}]"
+        end
+
+        overdue = grand_total > @project["time_limit"] if @project["time_limit"]
+        remaining = HighLine::String.new(to_clock_s(remaining)).red if overdue
+        remaining = to_clock_s(remaining) unless overdue
 
         str = ""
         if @options[:time]
            str = clock_string
         else
+          str += "#{clock_string} " if clock_string
           str += "#{company["name"]}: #{@project["name"]}"
-          str += " [#{clock_string}]"
-          str += " #{HighLine::String.new("Running").green}" if @project["running"]
+          str += " | Remaining: #{remaining}" if remaining
+          str += " | Grand total: #{to_clock_s(grand_total)}"
+          str += " #{spinner}" if @options[:foreground]
         end
 
         print "\e[0K\r#{str}" if @options[:foreground]

@@ -15,11 +15,12 @@ If run inside a directory with a linked project, the linked project will be upda
 Usage
   88miles sync
         EOS
+          opt :project, "Only sync the linked project", :type => :flag, :default => false
         end
 
         instance = self.new(settings, options)
         begin
-          instance.sync
+          instance.sync unless options[:project]
           instance.sync_current
         rescue OAuth2::Error => e
           say "Access to your 88 Miles may have been revoked. Please run <%= color('88miles setup', BOLD) %> again."
