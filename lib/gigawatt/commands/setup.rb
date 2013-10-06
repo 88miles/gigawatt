@@ -34,6 +34,9 @@ options:
         rescue OAuth2::Error => e
           puts "There was an issue authenticating your account. Please try again."
           return INVALID_OAUTH_TOKEN_EXIT_CODE
+        rescue Faraday::Error::ConnectionFailed => e
+          say "Couldn't connect to the 88 Miles server. Please try again later."
+          return CONNECTION_ERROR_EXIT_CODE
         end
         instance.postamble
 

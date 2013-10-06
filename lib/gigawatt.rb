@@ -22,6 +22,7 @@ require File.join(File.dirname(__FILE__), 'gigawatt', 'commands', 'status')
 require File.join(File.dirname(__FILE__), 'gigawatt', 'commands', 'log')
 
 module Gigawatt
+  CONNECTION_ERROR_EXIT_CODE = 4
   NO_PROJECT_EXIT_CODE = 3
   SETTINGS_FILE_EXISTS = 2
   INVALID_OAUTH_TOKEN_EXIT_CODE = 1

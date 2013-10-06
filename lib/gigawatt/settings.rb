@@ -3,7 +3,7 @@ module Gigawatt
     attr_accessor :access_key, :projects, :companies, :staff
 
     def initialize(options = {})
-      @options = Settings.defaults.merge(options)
+      @options = Settings.defaults.merge({ :path => options[:settings] })
       read if setup?
     end
 

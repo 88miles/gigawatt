@@ -25,6 +25,9 @@ Usage
         rescue OAuth2::Error => e
           say "Access to your 88 Miles may have been revoked. Please run <%= color('88miles setup', BOLD) %> again."
           return INVALID_OAUTH_TOKEN_EXIT_CODE
+        rescue Faraday::Error::ConnectionFailed => e
+          say "Couldn't connect to the 88 Miles server. Please try again later."
+          return CONNECTION_ERROR_EXIT_CODE
         end
 
         return 0
