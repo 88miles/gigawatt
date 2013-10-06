@@ -5,12 +5,12 @@
 
 Gem::Specification.new do |s|
   s.name = "88miles"
-  s.version = "1.0.4"
+  s.version = "1.0.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Myles Eftos"]
   s.date = "2013-10-06"
-  s.description = "88 Miles (http://88miles.net) is simple time tracking for freelance developers, designers and copywriters. This gem allows you to access you account from your command line."
+  s.description = "88 Miles (http://88miles.net) is simple time tracking for freelance developers, designers and copywriters. This gem allows you to access your account from your command line."
   s.email = "myles@madpilot.com.au"
   s.executables = ["88miles"]
   s.extra_rdoc_files = [
