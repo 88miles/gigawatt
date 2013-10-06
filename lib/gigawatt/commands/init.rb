@@ -14,8 +14,14 @@ module Gigawatt
         Trollop::die "#{directory} is not a directory" unless File.directory?(directory)
 
         instance = self.new(settings, options, directory)
-        instance.list_projects
-        return 0
+        begin
+          instance.list_projects
+        rescue OAuth2::Error => e
+          say "Access to your 88 Miles may have been revoked. Please run <%= color('88miles setup', BOLD) %> again."
+          return INVALID_OAUTH_TOKEN_EXIT_CODE
+        end
+
+        return OK_EXIT_CODE
       end
 
       def initialize(settings, options, directory)

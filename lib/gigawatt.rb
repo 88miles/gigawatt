@@ -5,6 +5,7 @@ require 'fileutils'
 require 'json'
 require 'open-uri'
 require 'terminal-table'
+require 'launchy'
 
 require File.join(File.dirname(__FILE__), 'gigawatt', 'cache')
 require File.join(File.dirname(__FILE__), 'gigawatt', 'settings')
@@ -21,4 +22,8 @@ require File.join(File.dirname(__FILE__), 'gigawatt', 'commands', 'status')
 require File.join(File.dirname(__FILE__), 'gigawatt', 'commands', 'log')
 
 module Gigawatt
+  NO_PROJECT_EXIT_CODE = 3
+  SETTINGS_FILE_EXISTS = 2
+  INVALID_OAUTH_TOKEN_EXIT_CODE = 1
+  OK_EXIT_CODE = 0
 end

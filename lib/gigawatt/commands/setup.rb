@@ -24,18 +24,20 @@ options:
 
         if instance.settings_exists?
           puts "The settings file #{instance.settings.path} already exists. Use --force to overwrite"
-          return -1
+          return SETTINGS_FILE_EXISTS
         end
 
         instance.preamble
 
-        if !instance.authenticate
-          puts "Invalid login or password"
-          return -2
+        begin
+          instance.authenticate
+        rescue OAuth2::Error => e
+          puts "There was an issue authenticating your account. Please try again."
+          return INVALID_OAUTH_TOKEN_EXIT_CODE
         end
         instance.postamble
 
-        return 0
+        return OK_EXIT_CODE
       end
 
       def initialize(settings, options)
@@ -56,28 +58,44 @@ options:
         say("88 Miles command line utility setup")
         say("-----------------------------------")
         say("To setup the 88 Miles command line utility, we need to authenticate you and request an access token.")
-        say("Please enter your login and password below. Please note: this utility does not store your login or password.")
+        say("We will open a browser, where you will be asked to login and approve access to this app.")
       end
 
       def postamble
         say("Thank you. We can now access your account. You can now initialize a directory by running <%= color('88miles init [directory]', BOLD) %>")
       end
 
-      def authenticate
-        login = ask("Login: ")
-        password = ask("Password: ") { |q| q.echo = "*" }
+      def get_access_key(url)
+        uri = URI(url)
+        token = uri.fragment.split('&').map{ |kv| kv.split('=') }.delete_if{ |kv| kv[0] != 'access_token' }.first
+        return token[1] if token
+        return nil
+      end
 
+      def authenticate
         client = Gigawatt::OAuth.client
 
-        begin
-          @access_key = client.password.get_token(login, password)
-        rescue OAuth2::Error
-          return false
+        redirect_uri = Gigawatt::OAuth.redirect_uri
+        url = client.auth_code.authorize_url(:response_type => 'token', :redirect_uri => redirect_uri)
+
+        Launchy.open(url) do |exception|
+          say "Couldn't open a browser. Please paste the following URL into a browser"
+          say url
         end
 
-        @settings.access_key = @access_key.token
+        say("After you have completed the approval process, cut and paste the URL you are redirected to.")
+        access_key = get_access_key(ask("URL: ") do |url|
+          url.validate = /\A#{redirect_uri}#access_token=.+&state=\Z/
+          url.responses[:not_valid] = "That URL doesn't look right. It should look like: #{redirect_uri}#access_token=[some characters]&state="
+        end)
+
+        @settings.access_key = access_key
+        @access_key = OAuth.token(access_key)
 
         cache = Gigawatt::Cache.new(@settings, @access_key)
+
+        cache.refresh!
+
         @settings.companies = cache.companies
         @settings.projects = cache.projects
 

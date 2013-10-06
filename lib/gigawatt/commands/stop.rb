@@ -20,8 +20,12 @@ options:
         end
 
         instance = self.new(settings, options)
-        instance.punch_out
-        return 0
+        begin
+          return instance.punch_out
+        rescue OAuth2::Error => e
+          say "Access to your 88 Miles may have been revoked. Please run <%= color('88miles setup', BOLD) %> again."
+          return INVALID_OAUTH_TOKEN_EXIT_CODE
+        end
       end
 
       def initialize(settings, options)
@@ -42,8 +46,10 @@ options:
 
           company = @cache.companies(true)[project["company_uuid"]]
           say("Punched out of #{company["name"]}: #{project["name"]}")
+          return OK_EXIT_CODE
         else
           say("No project found. Did you remember to run <%= color('88miles init [directory]', BOLD) %>?")
+          return NO_PROJECT_EXIT_CODE
         end
       end
     end

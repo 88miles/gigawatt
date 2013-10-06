@@ -18,8 +18,14 @@ Usage
         end
 
         instance = self.new(settings, options)
-        instance.sync
-        instance.sync_current
+        begin
+          instance.sync
+          instance.sync_current
+        rescue OAuth2::Error => e
+          say "Access to your 88 Miles may have been revoked. Please run <%= color('88miles setup', BOLD) %> again."
+          return INVALID_OAUTH_TOKEN_EXIT_CODE
+        end
+
         return 0
       end
 

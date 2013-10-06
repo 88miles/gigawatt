@@ -38,13 +38,18 @@ options:
       def get_settings
         unless @project
           say("No project found.")
-          return -1
+          return NO_PROJECT_EXIT_CODE
         end
 
         if @options[:sync]
           sync = Gigawatt::Commands::Sync.new(@settings, @options)
-          sync.sync
-          sync.sync_current
+          begin
+            sync.sync
+            sync.sync_current
+          rescue OAuth2::Error => e
+            say "Access to your 88 Miles may have been revoked. Please run <%= color('88miles setup', BOLD) %> again."
+            return INVALID_OAUTH_TOKEN_EXIT_CODE
+          end
         end
 
         if @options[:foreground]
@@ -58,7 +63,7 @@ options:
           print "\n"
         end
 
-        return 0
+        return OK_EXIT_CODE
       end
 
       def print_status
