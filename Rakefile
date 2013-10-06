@@ -15,7 +15,7 @@ require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "88miles"
-  gem.homepage = "http://github.com/madpilot/gigawatt"
+  gem.homepage = "http://github.com/88miles/gigawatt"
   gem.license = "MIT"
   gem.summary = %Q{Command line interface to 88 Miles}
   gem.description = %Q{88 Miles (http://88miles.net) is simple time tracking for freelance developers, designers and copywriters. This gem allows you to access you account from your command line.}
