@@ -14,7 +14,7 @@ require 'rake'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "gigawatt"
+  gem.name = "88miles"
   gem.homepage = "http://github.com/madpilot/gigawatt"
   gem.license = "MIT"
   gem.summary = %Q{Command line interface to 88 Miles}
