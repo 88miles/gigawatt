@@ -89,8 +89,8 @@ options:
           url.responses[:not_valid] = "That URL doesn't look right. It should look like: #{redirect_uri}#access_token=[some characters]&state="
         end)
 
-        @settings.access_key = access_key
-        @access_key = OAuth.token(access_key)
+        @settings.access_key = access_key.to_s
+        @access_key = OAuth.token(access_key.to_s)
 
         cache = Gigawatt::Cache.new(@settings, @access_key)
 
