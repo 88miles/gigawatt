@@ -74,6 +74,10 @@ To speed things up, your company, project and staff list is cached locally. If y
 
     88miles sync
 
+## Thank you
+
+A hat tip to domm for the inspiration: http://timetracker.plix.at/
+
 ## Copyright
 
 Copyright (c) 2013 [MadPilot Productions](http://www.madpilot.com.au/). See LICENSE.txt for further details.
