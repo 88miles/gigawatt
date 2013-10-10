@@ -29,7 +29,12 @@ globaloptions:
       end
 
       settings = Settings.new(options)
+      if ARGV.length == 0
+        Trollop::die "Please supply a subcommand"
+      end
+
       cmd = ARGV.shift.strip
+
       case cmd
       when "setup"
         Gigawatt::Commands::Setup.run!(settings)
